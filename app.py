@@ -219,7 +219,8 @@ elif user_menu == "Discipline WC 2022":
     for i in range(len(teams_2022)):
         yellow_and_red_cards.append((teams_2022[i], helper.get_yellow_cards(match, teams_2022[i]), helper.get_red_cards(match, teams_2022[i])))
     yellow_red_cards = pd.DataFrame(yellow_and_red_cards, columns = ['Team', 'Yellow cards', 'Red cards'])
-    st.table(yellow_red_cards)
+    fig7 = px.line(yellow_red_cards, x='Team', y=['Red cards', 'Yellow cards'])
+    st.plotly_chart(fig7)
     fair_play_award_winner = yellow_red_cards.sort_values(['Red cards', 'Yellow cards']).head(1)['Team'].tolist()[0]
     st.header("Fair Play Award")
     st.title(fair_play_award_winner)
