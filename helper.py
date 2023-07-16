@@ -91,7 +91,7 @@ def get_matches_per_edition(all_matches_1930_2022):
 def goals_scored_per_edition(goals_all):
     temp2 = goals_all['tournament_name'].value_counts()
     goals_per_edition = temp2.reset_index()
-    return goals_per_edition.rename(columns={'tournament_name': 'Edition', 'count': 'Goals scored'}).sort_values("Edition")
+    return goals_per_edition.rename(columns={'tournament_name': 'Edition', 'count': 'Goals scored'}).sort_values('Edition')
 
 def get_goal_ratios(goals_all, all_matches_1930_2022):
     temporary = goals_all['tournament_id'].value_counts() / all_matches_1930_2022['Tournament Id'].value_counts()
