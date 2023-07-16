@@ -130,7 +130,9 @@ elif user_menu == "All editions overview":
 
 
     st.header("Goals scored per edition")
-    st.table(helper.goals_scored_per_edition(goals_all_editions))
+    goals_per_edition = helper.goals_scored_per_edition(goals_all_editions)
+    fig8 = px.line(goals_per_edition, x="Edition", y="Goals scored")
+    st.plotly_chart(fig8)
 
     st.header("Top 5 countries with most goals scored")
     temp1000 = goals_all_editions['player_team_name'].value_counts()
