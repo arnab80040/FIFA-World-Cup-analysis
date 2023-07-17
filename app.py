@@ -116,7 +116,9 @@ elif user_menu == "All editions overview":
     st.table(goals_all_editions[goals_all_editions['own_goal'] == 0][['given_name', 'family_name', 'player_team_name']].value_counts().reset_index().rename(columns={'given_name': 'First name', 'family_name': 'Last name', 'count': 'Goals scored', 'player_team_name':'Country'}).head(15))
 
     st.header("Total matches played per edition")
-    st.table(helper.get_matches_per_edition(all_matches_1930_2022))
+    matches_per_edition = helper.get_matches_per_edition(all_matches_1930_2022)
+    fig11 = px.line(matches_per_edition, x = "Edition", y = "Total matches played")
+    st.plotly_chart(fig11)
 
 
     st.header("Matches played by countries in FIFA World Cups:")
