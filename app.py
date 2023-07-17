@@ -6,6 +6,7 @@ import plotly.express as px
 
 
 
+
 merged_table = preprocesor.preprocess()
 match = preprocesor.preprocess_match()
 goals = preprocesor.preprocess_goals()
@@ -206,14 +207,23 @@ elif user_menu == "Overview 2022 WC":
 
 
 
-    st.header("Shot conversion rates per team")
+
+    st.header("Attempts taken and on target per team")
+
     teams_and_shot_sonversion = []
     teams_in_2022 = helper.only_teams_list(match)
     for i in range(len(teams_in_2022)):
         teams_and_shot_sonversion.append((teams_in_2022[i], helper.shot_conversion_rate(match, goals, teams_in_2022[i]),helper.get_attempts_taken(match, teams_in_2022[i]), helper.attempts_on_goal_by(match, teams_in_2022[i])))
 
+
+
     temp60 = pd.DataFrame(teams_and_shot_sonversion, columns=['Team', 'Shot conversion rate(%)', 'Shots taken', 'On target'])
     shot_conversion = temp60.sort_values('Shot conversion rate(%)', ascending=False)
+    fig12 = px.bar(shot_conversion, y = ["Shots taken", "On target"], x = "Team")
+    st.plotly_chart(fig12)
+    st.header("Shot conversion rates per team")
+    shot_conversion.drop(['Shots taken'], axis=1, inplace=True)
+    shot_conversion.drop(['On target'], axis=1, inplace=True)
     st.table(shot_conversion)
 
 
@@ -232,8 +242,6 @@ elif user_menu == "Discipline WC 2022":
 
 
 elif user_menu == "Goals per minute WC 2022":
-    all_goals_2022 = goals_all_editions[goals_all_editions['tournament_id'] == "WC-2022"]
-    goals_per_minute = helper.goals_per_minute(goals_all_editions)
-    plot_scatter_goals = goals_per_minute.plot.scatter(x='Minute', y='Goals scored', c='Blue')
 
-    st.write(plot_scatter_goals)
+    fig13 = sns.heatmap(helper.get_goals_per_minute(goals_all_editions), annot = True)
+    st.pyplot(fig13.get_figure())
