@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def fetch_goal_tally(merged_table, team): 
+def fetch_goal_tally(merged_table, team):
     not_own_goals = merged_table[merged_table['own_goal'] == 0]
     team_goals = not_own_goals['player_team_name'].value_counts().reset_index()
     if team == "All":
@@ -84,14 +84,14 @@ def get_finals(all_matches_1930_2022):
 def get_matches_per_edition(all_matches_1930_2022):
     temp3 = all_matches_1930_2022['tournament Name'].value_counts()
     matches_per_edition = temp3.reset_index()
-    res =  matches_per_edition.rename(columns={'tournament Name': 'Edition', 'count': 'Total matches played'})sort_values("Edition")
+    res =  matches_per_edition.rename(columns={'tournament Name': 'Edition', 'count': 'Total matches played'}).sort_values("Edition")
     return res
 
 
 def goals_scored_per_edition(goals_all):
     temp2 = goals_all['tournament_name'].value_counts()
     goals_per_edition = temp2.reset_index()
-    return goals_per_edition.rename(columns={'tournament_name': 'Edition', 'count': 'Goals scored'}).sort_values('Edition')
+    return goals_per_edition.rename(columns={'tournament_name': 'Edition', 'count': 'Goals scored'}).sort_values("Edition")
 
 def get_goal_ratios(goals_all, all_matches_1930_2022):
     temporary = goals_all['tournament_id'].value_counts() / all_matches_1930_2022['Tournament Id'].value_counts()
@@ -141,6 +141,13 @@ def attempts_on_goal_by(match, team):
     cond2 = match.groupby('team2')
     b = cond2.get_group(team).drop_duplicates('team1')['on target attempts team2'].sum()
     return (a + b)
+
+def goals_per_minute(goals_all_editions):
+    all_goals_2022 = goals_all_editions[goals_all_editions['tournament_id'] == "WC-2022"]
+    goals_per_minute = all_goals_2022["minute_regulation"].value_counts().reset_index()
+    goals_per_minute.rename(columns={"minute_regulation": "Minute", "count": "Goals scored"}, inplace=True)
+    goals_per_minute.sort_values("Minute", inplace=True)
+    return goals_per_minute
 
 def get_goals_scored_individual(goals, team):
     goals2 = goals[goals['own_goal'] == 0]
