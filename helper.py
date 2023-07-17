@@ -185,3 +185,10 @@ def get_match_winner(all_matches_1930_2022, tournament_name):
 def get_list_all_editions(all_matches_1930_2022):
     all_editions_list = all_matches_1930_2022['tournament Name'].unique().tolist()
     return all_editions_list
+
+
+def get_goals_per_minute(goals):
+    pt = goals.pivot_table(index='minute_regulation', columns='player_team_name', values='goal_id', aggfunc='count')
+    pt.sort_values("minute_regulation")
+    pt.rename(volumns = {"player_team_name: Team"})
+    return pt
