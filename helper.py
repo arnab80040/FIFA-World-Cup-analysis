@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def fetch_goal_tally(merged_table, team):
+def fetch_goal_tally(merged_table, team): 
     not_own_goals = merged_table[merged_table['own_goal'] == 0]
     team_goals = not_own_goals['player_team_name'].value_counts().reset_index()
     if team == "All":
