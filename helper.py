@@ -84,7 +84,7 @@ def get_finals(all_matches_1930_2022):
 def get_matches_per_edition(all_matches_1930_2022):
     temp3 = all_matches_1930_2022['tournament Name'].value_counts()
     matches_per_edition = temp3.reset_index()
-    res =  matches_per_edition.rename(columns={'tournament Name': 'Edition', 'count': 'Total matches played'})
+    res =  matches_per_edition.rename(columns={'tournament Name': 'Edition', 'count': 'Total matches played'})sort_values("Edition")
     return res
 
 
