@@ -4,6 +4,8 @@ import streamlit as st
 import preprocesor, helper
 import plotly.express as px
 
+
+
 merged_table = preprocesor.preprocess()
 match = preprocesor.preprocess_match()
 goals = preprocesor.preprocess_goals()
@@ -15,7 +17,7 @@ st.sidebar.title("FIFA World Cup analysis")
 
 user_menu = st.sidebar.radio(
     'Select an Option',
-    ('Overview 2022 WC', 'Goals per team WC 2022', 'Golden boot WC 2022', 'Own goals WC 2022', 'Discipline WC 2022', 'All editions overview')
+    ('Overview 2022 WC', 'Goals per team WC 2022', 'Golden boot WC 2022', 'Own goals WC 2022', 'Goals per minute WC 2022 ', 'Discipline WC 2022', 'All editions overview')
 )
 
 
@@ -119,7 +121,6 @@ elif user_menu == "All editions overview":
     matches_per_edition = helper.get_matches_per_edition(all_matches_1930_2022)
     fig11 = px.line(matches_per_edition, x = "Edition", y = "Total matches played")
     st.plotly_chart(fig11)
-
 
     st.header("Matches played by countries in FIFA World Cups:")
     all_teams_1930_2022 = helper.get_1930_2022_teams(all_matches_1930_2022)
@@ -228,3 +229,11 @@ elif user_menu == "Discipline WC 2022":
     fair_play_award_winner = yellow_red_cards.sort_values(['Red cards', 'Yellow cards']).head(1)['Team'].tolist()[0]
     st.header("Fair Play Award")
     st.title(fair_play_award_winner)
+
+
+elif user_menu == "Goals per minute WC 2022":
+    all_goals_2022 = goals_all_editions[goals_all_editions['tournament_id'] == "WC-2022"]
+    goals_per_minute = helper.goals_per_minute(goals_all_editions)
+    plot_scatter_goals = goals_per_minute.plot.scatter(x='Minute', y='Goals scored', c='Blue')
+
+    st.write(plot_scatter_goals)
