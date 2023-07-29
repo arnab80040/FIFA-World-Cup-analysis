@@ -3,6 +3,7 @@ import streamlit
 import streamlit as st
 import preprocesor, helper
 import plotly.express as px
+import plotly.graph_objects as go
 
 
 
@@ -18,7 +19,7 @@ st.sidebar.title("FIFA World Cup analysis")
 
 user_menu = st.sidebar.radio(
     'Select an Option',
-    ('Overview 2022 WC', 'Goals per team WC 2022', 'Golden boot WC 2022', 'Own goals WC 2022', 'Goals per minute WC 2022 ', 'Discipline WC 2022', 'All editions overview')
+    ('Overview 2022 WC', 'Goals per team WC 2022', 'Golden boot WC 2022', 'Own goals WC 2022', 'Teams head to head comparison', 'Discipline WC 2022', 'All editions overview')
 )
 
 
@@ -153,6 +154,7 @@ elif user_menu == "All editions overview":
 
 
 
+
 elif user_menu == "Overview 2022 WC":
     number_teams_2022 = matches_2022['Home Team Name'].unique().shape[0]
     number_matches_2022 = matches_2022['Match Id'].count()
@@ -226,6 +228,26 @@ elif user_menu == "Overview 2022 WC":
     shot_conversion.drop(['On target'], axis=1, inplace=True)
     st.table(shot_conversion)
 
+elif user_menu == 'Teams head to head comparison':
+    teams_in_2022 = helper.only_teams_list((match))
+    selected_team1 = st.sidebar.selectbox("Select team 1", teams_in_2022)
+    selected_team2 = st.sidebar.selectbox("Select team 2", teams_in_2022)
+    fig15 = go.Figure()
+
+    categories = ["Shots taken", "Shots on target", "Goals scored", "Average ball possession", "Shot conversion rate"]
+    fig15.add_trace(go.Scatterpolar(
+        r=[helper.get_attempts_taken(match, selected_team1), helper.attempts_on_goal_by(match,selected_team1), helper.get_goals_scored_individual(goals, selected_team1), helper.find_possession(match, selected_team1), helper.shot_conversion_rate(match, goals, selected_team1)],
+        theta=categories,
+        fill='toself',
+        name=selected_team1
+    ))
+    fig15.add_trace(go.Scatterpolar(
+        r=[helper.get_attempts_taken(match, selected_team2), helper.attempts_on_goal_by(match, selected_team2), helper.get_goals_scored_individual(goals, selected_team2), helper.find_possession(match, selected_team2), helper.shot_conversion_rate(match, goals, selected_team2)],
+        theta=categories,
+        fill='toself',
+        name=selected_team2
+    ))
+    st.plotly_chart(fig15)
 
 elif user_menu == "Discipline WC 2022":
     st.header("Yellow and Red cards per team")
@@ -240,8 +262,3 @@ elif user_menu == "Discipline WC 2022":
     st.header("Fair Play Award")
     st.title(fair_play_award_winner)
 
-
-elif user_menu == "Goals per minute WC 2022":
-
-    fig13 = sns.heatmap(helper.get_goals_per_minute(goals_all_editions), annot = True)
-    st.pyplot(fig13.get_figure())
