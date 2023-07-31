@@ -192,3 +192,38 @@ def get_goals_per_minute(goals):
     pt.sort_values("minute_regulation")
     pt.rename(volumns = {"player_team_name: Team"})
     return pt
+
+def forced_turnovers_by(match, team):
+    cond1 = match.groupby('team1')
+    a = cond1.get_group(team).drop_duplicates('team2')["forced turnovers team1"].sum()
+    cond2 = match.groupby('team2')
+    b = cond2.get_group(team).drop_duplicates('team1')["forced turnovers team2"].sum()
+    return a+b
+
+def defensive_pressures_applied_by(match, team):
+    cond1 = match.groupby('team1')
+    a = cond1.get_group(team).drop_duplicates('team2')["defensive pressures applied team1"].sum()
+    cond2 = match.groupby('team2')
+    b = cond2.get_group(team).drop_duplicates('team1')["defensive pressures applied team2"].sum()
+    return a+b
+
+def goal_preventions_by(match, team):
+    cond1 = match.groupby('team1')
+    a = cond1.get_group(team).drop_duplicates('team2')["goal preventions team1"].sum()
+    cond2 = match.groupby('team2')
+    b = cond2.get_group(team).drop_duplicates('team1')["goal preventions team2"].sum()
+    return a+b
+
+def average_infront_offers_to_receive_by(match, team):
+    cond1 = match.groupby('team1')
+    a = cond1.get_group(team).drop_duplicates('team2')["infront offers to receive team1"].sum()
+    cond2 = match.groupby('team2')
+    b = cond2.get_group(team).drop_duplicates('team1')["infront offers to receive team2"].sum()
+    return (a+b)/matches_played_by_team(match, team)
+
+def average_passes_completed_by(match, team):
+    cond1 = match.groupby('team1')
+    a = cond1.get_group(team).drop_duplicates('team2')["passes completed team1"].sum()
+    cond2 = match.groupby('team2')
+    b = cond2.get_group(team).drop_duplicates('team1')["passes completed team2"].sum()
+    return (a+b)/matches_played_by_team(match, team)
