@@ -233,7 +233,7 @@ elif user_menu == 'Teams head to head comparison':
     selected_team1 = st.sidebar.selectbox("Select team 1", teams_in_2022)
     selected_team2 = st.sidebar.selectbox("Select team 2", teams_in_2022)
     fig15 = go.Figure()
-
+    st.header("Attacking stats")
     categories = ["Shots taken", "Shots on target", "Goals scored", "Average ball possession", "Shot conversion rate"]
     fig15.add_trace(go.Scatterpolar(
         r=[helper.get_attempts_taken(match, selected_team1), helper.attempts_on_goal_by(match,selected_team1), helper.get_goals_scored_individual(goals, selected_team1), helper.find_possession(match, selected_team1), helper.shot_conversion_rate(match, goals, selected_team1)],
@@ -248,6 +248,23 @@ elif user_menu == 'Teams head to head comparison':
         name=selected_team2
     ))
     st.plotly_chart(fig15)
+
+    fig16 = go.Figure()
+    st.header("Defensive/in possession stats")
+    categories2 = ["Forced turnovers", "Defensive pressures applied", "Goal preventions", "Average infront offers to receive", "Average passes completed"]
+    fig16.add_trace(go.Scatterpolar(
+        r=[helper.forced_turnovers_by(match, selected_team1), helper.defensive_pressures_applied_by(match, selected_team1), helper.goal_preventions_by(match, selected_team1), helper.average_infront_offers_to_receive_by(match, selected_team1), helper.average_passes_completed_by(match, selected_team1)],
+        theta=categories2,
+        fill='toself',
+        name=selected_team1
+    ))
+    fig16.add_trace(go.Scatterpolar(
+        r=[helper.forced_turnovers_by(match, selected_team1), helper.defensive_pressures_applied_by(match, selected_team2), helper.goal_preventions_by(match, selected_team2), helper.average_infront_offers_to_receive_by(match, selected_team2), helper.average_passes_completed_by(match, selected_team2)],
+        theta=categories2,
+        fill='toself',
+        name=selected_team2
+    ))
+    st.plotly_chart(fig16)
 
 elif user_menu == "Discipline WC 2022":
     st.header("Yellow and Red cards per team")
